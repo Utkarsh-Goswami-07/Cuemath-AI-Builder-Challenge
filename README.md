@@ -16,7 +16,8 @@ Turn a rough idea into a polished, ready-to-post social media creative in second
 | Layer | Tech |
 |-------|------|
 | Backend | Node.js + Express |
-| AI Content | Anthropic Claude (claude-opus-4-5) |
+| AI Content | Groq (Llama 3.3 70B) |
+| Database | MongoDB Atlas |
 | AI Images | Stability AI (optional) + SVG fallback |
 | Frontend | React 18 + Framer Motion |
 | Fonts | Syne + DM Sans |
@@ -25,63 +26,40 @@ Turn a rough idea into a polished, ready-to-post social media creative in second
 
 ## Quick Start
 
-### 1. Clone / unzip the project
+### 1. Clone the project
 
 ```bash
+git clone https://github.com/Utkarsh-Goswami-07/cuemath-studio.git
 cd cuemath-studio
 ```
 
-### 2. Run the interactive setup
+### 2. Install dependencies
 
 ```bash
-node scripts/setup.js
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
-This creates `backend/.env` with your API keys.
+### 3. Setup environment variables
 
-### 3. Install dependencies
-
-```bash
-npm run install:all
-```
-
-### 4. Start the app
-
-```bash
-npm run dev
-```
-
-Opens at **http://localhost:3000** (frontend) + **http://localhost:3001** (backend API)
-
----
-
-## Manual Setup (without setup script)
-
-1. Copy `.env.example` to `.env` in the `backend/` folder:
-
-```bash
-cp backend/.env.example backend/.env
-```
-
-2. Edit `backend/.env`:
+Create `backend/.env`:
 
 ```env
-ANTHROPIC_API_KEY=sk-ant-...your-key...
-STABILITY_API_KEY=sk-...optional...
+GROQ_API_KEY=your_groq_api_key
+MONGODB_URI=your_mongodb_atlas_uri
+STABILITY_API_KEY=
 PORT=3001
 NODE_ENV=development
 FRONTEND_URL=http://localhost:3000
 ```
 
-3. Install:
+Create `frontend/.env`:
 
-```bash
-npm install                 # root
-cd backend && npm install   # backend
-cd ../frontend && npm install  # frontend
+```env
+REACT_APP_API_URL=http://localhost:3001/api
 ```
 
-4. Start:
+### 4. Start the app
 
 ```bash
 # Terminal 1 — backend
@@ -91,16 +69,19 @@ cd backend && npm run dev
 cd frontend && npm start
 ```
 
+Opens at **http://localhost:3000**
+
 ---
 
 ## API Keys
 
 | Key | Required | Get It |
 |-----|----------|--------|
-| `ANTHROPIC_API_KEY` | ✅ Yes | [console.anthropic.com](https://console.anthropic.com) |
+| `GROQ_API_KEY` | ✅ Yes | [console.groq.com](https://console.groq.com) |
+| `MONGODB_URI` | ✅ Yes | [mongodb.com/atlas](https://mongodb.com/atlas) |
 | `STABILITY_API_KEY` | ⚠️ Optional | [platform.stability.ai](https://platform.stability.ai) |
 
-Without Stability AI, the app uses beautiful SVG illustrations as visual placeholders.
+Without Stability AI, the app uses SVG illustrations as visual placeholders.
 
 ---
 
@@ -111,25 +92,12 @@ Without Stability AI, the app uses beautiful SVG illustrations as visual placeho
 | POST | `/api/generate/creative` | Generate full creative from prompt |
 | POST | `/api/generate/slide` | Regenerate single slide |
 | POST | `/api/generate/caption` | Regenerate caption |
-| GET | `/api/generate/formats` | Available formats |
-| GET | `/api/generate/prompts` | Example prompts |
+| GET | `/api/generate/history` | Get last 20 creatives |
+| GET | `/api/generate/creative/:id` | Load a specific creative |
+| PUT | `/api/generate/creative/:id` | Update/auto-save creative |
+| DELETE | `/api/generate/creative/:id` | Delete creative |
 | POST | `/api/images/generate` | Generate single image |
-| POST | `/api/export/json` | Export as JSON |
-| POST | `/api/export/text` | Export as text |
 | GET | `/api/health` | Health check |
-
-### Example Request
-
-```bash
-curl -X POST http://localhost:3001/api/generate/creative \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Carousel about the forgetting curve and how spaced repetition fixes it",
-    "format": "carousel",
-    "slideCount": 6,
-    "tone": "Educational yet warm"
-  }'
-```
 
 ---
 
@@ -146,51 +114,49 @@ curl -X POST http://localhost:3001/api/generate/creative \
 
 ## Project Structure
 
-```
 cuemath-studio/
 ├── backend/
-│   ├── server.js              # Express app
+│   ├── server.js
+│   ├── config/
+│   │   └── db.js                # MongoDB connection
+│   ├── models/
+│   │   └── Creative.js          # Mongoose schema
 │   ├── routes/
-│   │   ├── generate.js        # Content generation endpoints
-│   │   ├── images.js          # Image generation endpoints
-│   │   └── export.js          # Export endpoints
+│   │   ├── generate.js          # Content generation + CRUD
+│   │   ├── images.js            # Image generation
+│   │   └── export.js            # Export endpoints
 │   └── services/
-│       ├── claudeService.js   # Anthropic AI integration
-│       └── imageService.js    # Stability AI + SVG fallback
+│       ├── claudeService.js     # Groq AI integration
+│       └── imageService.js      # SVG fallback visuals
 ├── frontend/
 │   └── src/
 │       ├── pages/
-│       │   └── Studio.js      # Main studio page
+│       │   └── Studio.js
 │       ├── components/
-│       │   ├── IdeaInput.js   # Prompt input
+│       │   ├── IdeaInput.js
 │       │   ├── FormatSelector.js
-│       │   ├── SlideCanvas.js # Visual slide renderer
-│       │   ├── SlideStrip.js  # Thumbnail navigation
-│       │   ├── SlideEditor.js # Text editing + AI rewrite
+│       │   ├── SlideCanvas.js
+│       │   ├── SlideStrip.js
+│       │   ├── SlideEditor.js
 │       │   ├── CaptionPanel.js
-│       │   ├── BrandPanel.js  # Theme/color controls
+│       │   ├── BrandPanel.js
 │       │   ├── ExportPanel.js
-│       │   └── ProgressOverlay.js
+│       │   ├── ProgressOverlay.js
+│       │   └── Sidebar.js
 │       ├── hooks/
-│       │   └── useStudio.js   # All state management
+│       │   └── useStudio.js
 │       └── utils/
-│           └── api.js         # API client
-└── scripts/
-    └── setup.js               # Interactive setup script
-```
+│           └── api.js
 
 ---
 
-## Roadmap / Next Enhancements
+## Roadmap
 
-- [ ] HTML canvas export (PNG/PDF download of slides)
-- [ ] Saved creatives library with local storage
+- [ ] PNG/PDF export of slides
 - [ ] Custom brand kit upload (logo, fonts)
 - [ ] Drag-and-drop slide reordering
-- [ ] Figma / Canva export integration
 - [ ] Scheduling integration (Buffer, Later)
 - [ ] A/B variant generation
-- [ ] Analytics dashboard
 
 ---
 

@@ -115,19 +115,21 @@ Without Stability AI, the app uses SVG illustrations as visual placeholders.
 ## Project Structure
 
 cuemath-studio/
+│
 ├── backend/
 │   ├── server.js
 │   ├── config/
-│   │   └── db.js                # MongoDB connection
+│   │   └── db.js                  # MongoDB connection
 │   ├── models/
-│   │   └── Creative.js          # Mongoose schema
+│   │   └── Creative.js            # Mongoose schema
 │   ├── routes/
-│   │   ├── generate.js          # Content generation + CRUD
-│   │   ├── images.js            # Image generation
-│   │   └── export.js            # Export endpoints
+│   │   ├── generate.js            # Content generation + CRUD
+│   │   ├── images.js              # Image generation
+│   │   └── export.js              # Export endpoints
 │   └── services/
-│       ├── claudeService.js     # Groq AI integration
-│       └── imageService.js      # SVG fallback visuals
+│       ├── claudeService.js       # Groq AI integration
+│       └── imageService.js        # SVG fallback visuals
+│
 ├── frontend/
 │   └── src/
 │       ├── pages/
@@ -147,7 +149,6 @@ cuemath-studio/
 │       │   └── useStudio.js
 │       └── utils/
 │           └── api.js
-
 ---
 
 ## Roadmap

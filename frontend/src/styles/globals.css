@@ -1,0 +1,92 @@
+:root {
+  --brand-orange: #FF6B35;
+  --brand-orange-light: #FF8A5E;
+  --brand-orange-dark: #E5541A;
+  --brand-navy: #1A1A2E;
+  --brand-navy-light: #252540;
+  --brand-gold: #FFD700;
+  --brand-cream: #FFF8F5;
+  --brand-cream-dark: #F5EDE5;
+  --surface: #ffffff;
+  --surface-raised: #f9f9f9;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5A5A7A;
+  --text-muted: #9A9AB0;
+  --border: #E8E8F0;
+  --border-focus: var(--brand-orange);
+  --shadow-sm: 0 1px 3px rgba(26,26,46,0.08);
+  --shadow-md: 0 4px 16px rgba(26,26,46,0.12);
+  --shadow-lg: 0 12px 40px rgba(26,26,46,0.16);
+  --shadow-xl: 0 24px 60px rgba(26,26,46,0.2);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--brand-cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Selection */
+::selection { background: var(--brand-orange); color: white; }
+
+/* Buttons base */
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+}
+button:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 2px;
+}
+
+/* Inputs */
+input, textarea, select {
+  font-family: var(--font-body);
+  outline: none;
+  transition: var(--transition);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15) !important;
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}

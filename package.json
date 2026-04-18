@@ -1,0 +1,16 @@
+{
+  "name": "cuemath-social-studio",
+  "version": "1.0.0",
+  "description": "Cuemath Social Media Studio — Turn ideas into polished social creatives",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "setup": "node scripts/setup.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

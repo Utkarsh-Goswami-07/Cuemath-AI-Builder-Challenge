@@ -114,42 +114,41 @@ Without Stability AI, the app uses SVG illustrations as visual placeholders.
 
 ## Project Structure
 
+```
 cuemath-studio/
-│
 ├── backend/
 │   ├── server.js
 │   ├── config/
-│   │   └── db.js                  # MongoDB connection
+│   │   └── db.js
 │   ├── models/
-│   │   └── Creative.js            # Mongoose schema
+│   │   └── Creative.js
 │   ├── routes/
-│   │   ├── generate.js            # Content generation + CRUD
-│   │   ├── images.js              # Image generation
-│   │   └── export.js              # Export endpoints
+│   │   ├── generate.js
+│   │   ├── images.js
+│   │   └── export.js
 │   └── services/
-│       ├── claudeService.js       # Groq AI integration
-│       └── imageService.js        # SVG fallback visuals
-│
-├── frontend/
-│   └── src/
-│       ├── pages/
-│       │   └── Studio.js
-│       ├── components/
-│       │   ├── IdeaInput.js
-│       │   ├── FormatSelector.js
-│       │   ├── SlideCanvas.js
-│       │   ├── SlideStrip.js
-│       │   ├── SlideEditor.js
-│       │   ├── CaptionPanel.js
-│       │   ├── BrandPanel.js
-│       │   ├── ExportPanel.js
-│       │   ├── ProgressOverlay.js
-│       │   └── Sidebar.js
-│       ├── hooks/
-│       │   └── useStudio.js
-│       └── utils/
-│           └── api.js
----
+│       ├── claudeService.js
+│       └── imageService.js
+└── frontend/
+    └── src/
+        ├── pages/
+        │   └── Studio.js
+        ├── components/
+        │   ├── IdeaInput.js
+        │   ├── FormatSelector.js
+        │   ├── SlideCanvas.js
+        │   ├── SlideStrip.js
+        │   ├── SlideEditor.js
+        │   ├── CaptionPanel.js
+        │   ├── BrandPanel.js
+        │   ├── ExportPanel.js
+        │   ├── ProgressOverlay.js
+        │   └── Sidebar.js
+        ├── hooks/
+        │   └── useStudio.js
+        └── utils/
+            └── api.js
+```
 
 ## Roadmap
 
